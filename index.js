@@ -1,18 +1,38 @@
 const express = require("express");
+const path = require("path") //builtin
 const { connectToMongoDB } = require("./connect");
 const urlRoute = require("./routes/url");
+const staticRouter = require('./routes/staticRouter')
 const URL = require("./models/url");
 
 const app = express();
 const PORT = 3000;
-app.use(express.json());
-connectToMongoDB("mongodb://127.0.0.1:27017/short-url").then(() =>
+
+connectToMongoDB("mongodb+srv://bhawna16dav:bhawna@cluster0.qajaj5w.mongodb.net/").then(() =>
   console.log("mongoDB connected")
 );
 
-app.use("/url", urlRoute);
+app.set("view engine" , "ejs");
+app.set('views' , path.resolve("./views"))
 
-app.get("/:shortId", async (req, res) => {
+app.use(express.json());
+app.use(express.urlencoded({extended: false}));
+
+app.use("/url", urlRoute);
+app.use("/", staticRouter)
+
+
+{/* <html>
+      <head></head>
+      <body>
+        <ol>
+          ${allURLs.map(url => `<li>${url.shortId} - ${url.redirectURL} - ${url.visitHistory.length}</li>`).join('')}
+        </ol>
+      </body>
+    </html> */}
+
+
+app.get("/url/:shortId", async (req, res) => {
   const shortId = req.params.shortId;
   const entry = await URL.findOneAndUpdate(
     {
@@ -26,7 +46,7 @@ app.get("/:shortId", async (req, res) => {
       },
     }
   );
-  res.redirect(entry.redirectURL)
+  res.redirect(entry.redirectURL);
 });
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 

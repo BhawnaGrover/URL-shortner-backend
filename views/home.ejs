@@ -4,58 +4,265 @@
 <head>
     <style>
         body {
-            font-family: Arial, Helvetica, sans-serif
+            font-family: Arial, Helvetica, sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: #343a40;
+        }
+        .navbar {
+            width: 100%;
+            background-color: #138496;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .navbar-left h1{
+            padding-left: 20px;
+            color: white;
+            align-items: center;
+        }
+
+        .navbar-right {
+            display: flex;
+            align-items: center;
+            padding-right: 20px;
+        }
+        .navbar-right a{
+            color: #0f6674;
+            background-color: #ffffff;
+            padding: 5px;
+        }
+
+        .username {
+            margin-right: 10px;
+            color: #ffffff;
+        }
+
+
+        h1 {
+            color: #138496;
+            margin-bottom: 20px;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 600px;
+            text-align: center;
+            padding: 20px;
+            background: #ffffff;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+            justify-content: center;
+            border-radius: 8px;
+            overflow-wrap: break-word;
+        }
+
+        .url-generated {
+            background-color: #e2f3f5;
+            color: #0f6674;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            word-break: break-all;
+        }
+
+        form {
+            background: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #495057;
+        }
+
+        input[type="text"] {
+            width: calc(100% - 22px);
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+        }
+
+        button {
+            background-color: #17a2b8;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background-color: #138496;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background: #ffffff;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            overflow: hidden;
+            table-layout: fixed;
+        }
+
+        th,
+        td {
+            padding: 12px;
+            text-align: center;
+            border-bottom: 1px solid #dee2e6;
+            overflow-wrap: break-word;
+        }
+
+        th {
+            background-color: #e9ecef;
+            color: #495057;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+
+        tr:hover {
+            background-color: #e2e6ea;
+        }
+
+        a {
+            color: #17a2b8;
+            text-decoration: none;
+        }
+        a i{
+            color: rgb(220, 22, 22);
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                width: 100%;
+                padding: 10px;
+            }
+
+            input[type="text"] {
+                width: calc(100% - 20px);
+                padding: 8px;
+            }
+
+            button {
+                width: 100%;
+                padding: 10px;
+                font-size: 14px;
+            }
+
+            table {
+                font-size: 14px;
+            }
+
+            th,
+            td {
+                padding: 10px;
+            }
         }
     </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home Page</title>
 </head>
 
 <body>
-    <h1>URL Shortener</h1>
-    <% if (locals.id) { %>
-        <p>URL Generated: http://localhost:3000/url/<%=id%>
-        </p>
-        <% } %>
-            <div>
+    <div class="navbar">
+        <div class="navbar-left">
+            <h1>URL Shortener</h1>
+        </div>
+        <div class="navbar-right">
+            <span class="username">Hi <%= username %>!</span>
+            <a href="/user/logout">Logout</a>
+        </div>
+    </div>
+    <div class="container">
+        <h1>URL Shortener</h1>
+        <% if (locals.id) { %>
+            <div class="url-generated">
+                <p>URL Generated: <a href="http://localhost:3000/url/<%=id%>" target="_blank"
+                        id="myURL">http://localhost:3000/url/<%=id%></a></p>
+                <button onclick="copyFunction('myURL')">Copy Short URL</button>
+                <button onclick="redirectToHome()">Home</button>
+            </div>
+            <% } %>
                 <form method="POST" action="/url">
-                    <label>Enter Yout Original URL</label>
-                    <input type="" name="url" placeholder="https://example.com" />
+                    <label>Enter Your Original URL</label>
+                    <input type="text" name="url" placeholder="https://example.com" required />
                     <button type="submit">Generate</button>
                 </form>
-            </div>
-            <div>
                 <% if (locals.urls) { %>
                     <table>
                         <thead>
-                            <th>S.No</th>
-                            <th>ShortID</th>
-                            <th>Redirect</th>
-                            <th>Clicks</th>
+                            <tr>
+                                <th>S.No</th>
+                                <th>ShortID</th>
+                                <th>Redirect</th>
+                                <th>Clicks</th>
+                                <th>Action</th>
+                            </tr>
                         </thead>
                         <tbody>
-                            <% urls.forEach((url,index)=> { %>
+                            <% urls.forEach((url, index)=> { %>
                                 <tr>
                                     <td>
-                                        <%= index+1 %>
+                                        <%= index + 1 %>
                                     </td>
-                                    <td>
-                                        <%= url.shortId %>
-                                    </td>
-                                    <td>
-                                        <%= url.redirectURL%>
-                                    </td>
+                                    <td><a href="<%=" http://localhost:3000/url/"+url.shortId %>">
+                                            <%= "http://localhost:3000/url/" +url.shortId %>
+                                        </a></td>
+                                    <td><a href="<%= url.redirectURL %>" target="_blank">
+                                            <%= url.redirectURL %>
+                                        </a></td>
                                     <td>
                                         <%= url.visitHistory.length %>
+                                    </td>
+                                    <td>
+                                        <a href="/url/delete/<%= url.shortId%>"><i class="fas fa-trash-alt"></i></a>
                                     </td>
                                 </tr>
                                 <% }) %>
                         </tbody>
                     </table>
                     <% } %>
-            </div>
+    </div>
+    <script>
+        function copyFunction(elm_id) {
+            var text = document.getElementById(elm_id).innerHTML;
 
+            navigator.clipboard.writeText(text);
+            alert("Copied the text: " + text);
+        }
+        function redirectToHome() {
+            window.location.href = '/'; // Redirect to home page
+        }
+    </script>
 </body>
 
 </html>

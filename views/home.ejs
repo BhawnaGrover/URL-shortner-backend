@@ -206,8 +206,8 @@
         <h1>URL Shortener</h1>
         <% if (locals.id) { %>
             <div class="url-generated">
-                <p>URL Generated: <a href="http://localhost:3000/url/<%=id%>" target="_blank"
-                        id="myURL">http://localhost:3000/url/<%=id%></a></p>
+                <p>URL Generated: <a href="https://url-shortner-eta-black.vercel.app/url/<%=id%>" target="_blank"
+                        id="myURL">https://url-shortner-eta-black.vercel.app/url/<%=id%></a></p>
                 <button onclick="copyFunction('myURL')">Copy Short URL</button>
                 <button onclick="redirectToHome()">Home</button>
             </div>
@@ -234,8 +234,8 @@
                                     <td>
                                         <%= index + 1 %>
                                     </td>
-                                    <td><a href="<%=" http://localhost:3000/url/"+url.shortId %>">
-                                            <%= "http://localhost:3000/url/" +url.shortId %>
+                                    <td><a href="<%=" https://url-shortner-eta-black.vercel.app/url/"+url.shortId %>">
+                                            <%= "https://url-shortner-eta-black.vercel.app/url/" +url.shortId %>
                                         </a></td>
                                     <td><a href="<%= url.redirectURL %>" target="_blank">
                                             <%= url.redirectURL %>

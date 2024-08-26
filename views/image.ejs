@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <title>Image-to-URL</title>
+    <style>
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: #ffffff;
+            margin: 0;
+            padding: 0;
+            color: #000000;
+            /* Updated to ensure text is visible on white background */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .navbar {
+            width: 100%;
+            background: linear-gradient(135deg, #6E4BFA, #9D85D9);
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 40px;
+            box-sizing: border-box;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .navbar-left {
+            display: flex;
+            align-items: center;
+        }
+
+        .navbar-left img {
+            height: 50px;
+            margin-right: 10px;
+            border-radius: 10%;
+        }
+
+        .navbar-left h1 {
+            margin: 0;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .navbar-center {
+            display: flex;
+            justify-content: center;
+            flex-grow: 1;
+        }
+
+        .navbar-center button {
+            color: #6E4BFA;
+            background-color: #ffffff;
+            margin: 5px;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 25px;
+            text-decoration: none;
+            cursor: pointer;
+            transition: background-color 0.3s, color 0.3s, box-shadow 0.3s;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .navbar-center button:hover {
+            background-color: #5D39E6;
+            color: #ffffff;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .navbar-right {
+            display: flex;
+            align-items: center;
+        }
+
+        .navbar-right .username {
+            margin-right: 20px;
+            font-weight: bold;
+        }
+
+        .navbar-right a {
+            color: #6E4BFA;
+            background-color: #ffffff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 25px;
+            text-decoration: none;
+            cursor: pointer;
+            transition: background-color 0.3s, color 0.3s, box-shadow 0.3s;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .navbar-right a:hover {
+            background-color: #5D39E6;
+            color: #ffffff;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .content {
+            flex-grow: 1;
+            width: 100%;
+            overflow-y: auto;
+            padding-top: 80px;
+            /* Height of the navbar */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #ffffff;
+        }
+
+        .container {
+            max-width: 400px;
+            width: 100%;
+            background: #e4dbfc;
+            padding: 30px;
+            border-radius: 30px;
+        }
+
+        .img-area {
+            position: relative;
+            width: 100%;
+            height: 240px;
+            background: #c5affd;
+            margin-bottom: 30px;
+            border-radius: 15px;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        .img-area .icon {
+            font-size: 100px;
+        }
+
+        .img-area h3 {
+            font-size: 20px;
+            font-weight: 500;
+            margin-bottom: 6px;
+        }
+
+        .img-area p {
+            color: #ffffff;
+        }
+
+        .img-area p span {
+            font-weight: 600;
+        }
+
+        .img-area img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+            z-index: 100;
+        }
+
+        .img-area::before {
+            content: attr(data-img);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, .5);
+            color: #fff;
+            font-weight: 500;
+            text-align: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            pointer-events: none;
+            opacity: 0;
+            transition: all .3s ease;
+            z-index: 200;
+        }
+
+        .img-area.active:hover::before {
+            opacity: 1;
+        }
+
+        .select-image {
+            display: block;
+            width: 100%;
+            padding: 16px 0;
+            border-radius: 15px;
+            background: linear-gradient(135deg, #6E4BFA, #9D85D9);
+            color: #ffffff;
+            font-weight: 500;
+            font-size: 16px;
+            border: none;
+            cursor: pointer;
+            transition: all .3s ease;
+        }
+
+        .select-image:hover {
+            background: #ffffff;
+            color: #5D39E6;
+        }
+
+        #imageUrl {
+            margin-bottom: 10px;
+            font-size: 14px;
+            font-weight: 500;
+            color: #6E4BFA;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            
+        }
+
+        #copyButton,
+        #refreshButton {
+            margin: 5px;
+            padding: 10px 20px;
+            border: none;
+            width: 100%;
+            border-radius: 25px;
+            background-color: #6E4BFA;
+            color: #ffffff;
+            cursor: pointer;
+            transition: background-color 0.3s, color 0.3s, box-shadow 0.3s;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        #copyButton:hover,
+        #refreshButton:hover {
+            background-color: #5D39E6;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="navbar">
+        <div class="navbar-left">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSQRtTuC0zhEHvLtuDY_0QVqe9NkSS_B1aihg&s"
+                alt="Logo">
+            <h1>SnapLinks.com</h1>
+        </div>
+        <div class="navbar-center">
+            <button onclick="redirectToHome()">URL Shortener</button>
+            <button onclick="redirectToImage()">Image to URL</button>
+            <button onclick="redirectToQR()">Image to QR</button>
+        </div>
+        <div class="navbar-right">
+            <span class="username">Hi <%= username %>!</span>
+            <a href="/user/logout">Logout</a>
+        </div>
+    </div>
+    <div class="content">
+        <div class="container">
+            <form id="uploadForm" method="POST" action="/image/upload" enctype="multipart/form-data">
+                <input type="file" id="file" name="image" accept="image/*" hidden>
+                <div class="img-area" data-img="">
+                    <i class='bx bxs-cloud-upload icon'></i>
+                    <h3>Upload Image</h3>
+                    <p>Image size must be less than <span>2MB</span></p>
+                </div>
+                <button type="button" class="select-image">Upload Image</button>
+                <div>
+                    <p id="imageUrl"></p>
+                    <button id="copyButton" type="button" disabled>Copy URL</button>
+                    <button id="refreshButton" type="button" style="display: none;">Refresh</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <script>
+        const selectImage = document.querySelector('.select-image');
+        const inputFile = document.querySelector('#file');
+        const imgArea = document.querySelector('.img-area');
+        const uploadForm = document.getElementById('uploadForm');
+        const copyButton = document.getElementById('copyButton');
+        const refreshButton = document.getElementById('refreshButton');
+        const imageUrlElement = document.getElementById('imageUrl');
+
+        selectImage.addEventListener('click', function () {
+            inputFile.click();
+        });
+
+        inputFile.addEventListener('change', function () {
+            const image = this.files[0];
+            if (image.size < 2000000) {
+                const reader = new FileReader();
+                reader.onload = () => {
+                    const allImg = imgArea.querySelectorAll('img');
+                    allImg.forEach(item => item.remove());
+                    const imgUrl = reader.result;
+                    const img = document.createElement('img');
+                    img.src = imgUrl;
+                    imgArea.appendChild(img);
+                    imgArea.classList.add('active');
+                    imgArea.dataset.img = image.name;
+
+                    // Submit the form after image selection and validation
+                    uploadForm.submit();
+                };
+                reader.readAsDataURL(image);
+            } else {
+                alert("Image size more than 2MB");
+            }
+        });
+
+        copyButton.addEventListener('click', () => {
+            const imageUrl = imageUrlElement.textContent;
+            navigator.clipboard.writeText(imageUrl)
+                .then(() => {
+                    alert('URL copied to clipboard!');
+                })
+                .catch(() => {
+                    alert('Failed to copy URL!');
+                });
+        });
+
+        refreshButton.addEventListener('click', () => {
+            const uploadedImage = document.querySelector('.img-area img');
+            if (uploadedImage) uploadedImage.src = '';
+            imgArea.classList.remove('active');
+            imageUrlElement.textContent = '';
+            document.getElementById('file').value = '';
+            copyButton.disabled = true;
+            refreshButton.style.display = 'none';
+        });
+
+        // Handle URL display from server-side rendering
+        document.addEventListener('DOMContentLoaded', () => {
+            const url = "<%= url %>"; // EJS template variable for URL
+            if (url) {
+                imageUrlElement.textContent = url;
+                copyButton.disabled = false;
+                refreshButton.style.display = 'block';
+            }
+        });
+
+        function redirectToHome() {
+            window.location.href = '/'; // Redirect to home page
+        }
+
+        function redirectToQR() {
+            window.location.href = '/qrgenerate'; // Redirect to QR generator page
+        }
+
+        function redirectToImage() {
+            window.location.href = '/image';
+        }
+    </script>
+</body>
+
+</html>

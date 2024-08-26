@@ -8,6 +8,8 @@ const URL = require("./models/url");
 const urlRoute = require("./routes/url");
 const staticRouter = require('./routes/staticRouter');
 const userRoute = require('./routes/user');
+const qrgenerateRouter = require('./routes/qrgenerate');
+const image = require('./routes/image');
 
 const app = express();
 const PORT = 3000;
@@ -19,14 +21,17 @@ connectToMongoDB("mongodb+srv://bhawna16dav:bhawna@cluster0.qajaj5w.mongodb.net/
 //   console.log("mongoDB connected")
 // );
 
+app.use(express.json());
+app.use(express.urlencoded({extended: false}));
 app.set("view engine" , "ejs");
 app.set('views' , path.resolve("./views"))
 app.use(cookieParser());
-app.use(express.json());
-app.use(express.urlencoded({extended: false}));
+
 app.use("/url", restrictToLoggedinUserOnly, urlRoute);
 app.use("/user", userRoute);
 app.use("/", checkAuth, staticRouter)
+app.use("/qrgenerate", qrgenerateRouter);
+app.use("/image", image);
 
 app.get("/url/:shortId", async (req, res) => {
   const shortId = req.params.shortId;

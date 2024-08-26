@@ -4,50 +4,115 @@
 <head>
     <style>
         body {
-            font-family: Arial, Helvetica, sans-serif;
-            background-color: #f8f9fa;
+            font-family: 'Montserrat', sans-serif;
+            background: linear-gradient(#9D85D9);
             margin: 0;
-            
+            padding: 0;
+            color: #ffffff;
             display: flex;
             flex-direction: column;
-            justify-content: center;
             align-items: center;
-            color: #343a40;
+            justify-content: flex-start;
+            height: 100vh;
+            overflow: hidden;
         }
+
         .navbar {
             width: 100%;
-            background-color: #138496;
+            background: linear-gradient(135deg, #6E4BFA, #9D85D9);
             color: white;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            padding: 10px 40px;
+            box-sizing: border-box;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
         }
 
-        .navbar-left h1{
-            padding-left: 20px;
-            color: white;
+        .navbar-left {
+            display: flex;
             align-items: center;
+        }
+
+        .navbar-left img {
+            height: 50px;
+            margin-right: 10px;
+            border-radius: 10%;
+        }
+
+        .navbar-left h1 {
+            margin: 0;
+            font-size: 24px;
+            font-weight: bold;
+            color: white;
+        }
+
+        .navbar-center {
+            display: flex;
+            justify-content: center;
+            flex-grow: 1;
+        }
+
+        .navbar-center button {
+            color: #6E4BFA;
+            background-color: #ffffff;
+            margin: 5px;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 25px;
+            text-decoration: none;
+            cursor: pointer;
+            transition: background-color 0.3s, color 0.3s, box-shadow 0.3s;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .navbar-center button:hover {
+            background-color: #5D39E6;
+            color: #ffffff;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
         }
 
         .navbar-right {
             display: flex;
             align-items: center;
-            padding-right: 20px;
         }
-        .navbar-right a{
-            color: #0f6674;
+
+        .navbar-right .username {
+            margin-right: 20px;
+            font-weight: bold;
+        }
+
+        .navbar-right a {
+            color: #6E4BFA;
             background-color: #ffffff;
-            padding: 5px;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 25px;
+            text-decoration: none;
+            cursor: pointer;
+            transition: background-color 0.3s, color 0.3s, box-shadow 0.3s;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
         }
 
-        .username {
-            margin-right: 10px;
+        .navbar-right a:hover {
+            background-color: #5D39E6;
             color: #ffffff;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
         }
 
+        .content {
+            flex-grow: 1;
+            width: 100%;
+            overflow-y: auto;
+            padding-top: 80px; /* Height of the navbar */
+        }
 
         h1 {
-            color: #138496;
+            color: #343a40;
             margin-bottom: 20px;
         }
 
@@ -58,14 +123,14 @@
             padding: 20px;
             background: #ffffff;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            margin-top: 20px;
+            margin: 20px auto;
             justify-content: center;
             border-radius: 8px;
             overflow-wrap: break-word;
         }
 
         .url-generated {
-            background-color: #e2f3f5;
+            background-color: linear-gradient(135deg, #6E4BFA, #9D85D9);
             color: #0f6674;
             padding: 15px;
             border-radius: 8px;
@@ -74,40 +139,44 @@
         }
 
         form {
-            background: #ffffff;
+            background: #e4dbfc;
             padding: 20px;
-            border-radius: 8px;
+            border-radius: 10px;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
             margin-bottom: 20px;
         }
 
         label {
             display: block;
-            margin-bottom: 8px;
+            margin-bottom: 10px;
             font-weight: bold;
             color: #495057;
         }
 
         input[type="text"] {
-            width: calc(100% - 22px);
-            padding: 10px;
-            margin-bottom: 10px;
-            border: 1px solid #ced4da;
-            border-radius: 4px;
-        }
-
-        button {
-            background-color: #17a2b8;
-            color: white;
-            padding: 10px 15px;
+            width: 100%;
+            padding: 15px;
+            margin-bottom: 20px;
             border: none;
-            border-radius: 4px;
-            cursor: pointer;
+            border-radius: 10px;
+            box-sizing: border-box;
             font-size: 16px;
         }
+        .submitbutton{
+            background: linear-gradient(135deg, #6E4BFA, #9D85D9);
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s, color 0.3s, box-shadow 0.3s;
+        }
 
-        button:hover {
-            background-color: #138496;
+        .submitbutton:hover {
+            background: #ffffff;
+            color: #5D39E6;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
         }
 
         table {
@@ -127,6 +196,7 @@
             text-align: center;
             border-bottom: 1px solid #dee2e6;
             overflow-wrap: break-word;
+            color: #6E4BFA;
         }
 
         th {
@@ -143,10 +213,11 @@
         }
 
         a {
-            color: #17a2b8;
+            color: #6E4BFA;
             text-decoration: none;
         }
-        a i{
+
+        a i {
             color: rgb(220, 22, 22);
             padding: 5px 10px;
             border: none;
@@ -187,6 +258,7 @@
         }
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home Page</title>
@@ -195,72 +267,77 @@
 <body>
     <div class="navbar">
         <div class="navbar-left">
-            <h1>URL Shortener</h1>
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSQRtTuC0zhEHvLtuDY_0QVqe9NkSS_B1aihg&s" alt="Logo">
+            <h1>SnapLinks.com</h1>
+        </div>
+        <div class="navbar-center">
+            <button onclick="redirectToURL()">URL Shortener</button>
+            <button onclick="redirectToImage()">Image to URL</button>
+            <button onclick="redirectToQR()">Image to QR</button>
         </div>
         <div class="navbar-right">
             <span class="username">Hi <%= username %>!</span>
             <a href="/user/logout">Logout</a>
         </div>
     </div>
-    <div class="container">
-        <h1>URL Shortener</h1>
-        <% if (locals.id) { %>
+    <div class="content">
+        <div class="container">
+            <h1>URL Shortener</h1>
+            <% if (locals.id) { %>
             <div class="url-generated">
-                <p>URL Generated: <a href="https://url-shortner-eta-black.vercel.app/url/<%=id%>" target="_blank"
-                        id="myURL">https://url-shortner-eta-black.vercel.app/url/<%=id%></a></p>
-                <button onclick="copyFunction('myURL')">Copy Short URL</button>
-                <button onclick="redirectToHome()">Home</button>
+                <p>URL Generated: <a href="https://url-shortner-eta-black.vercel.app/url/<%= id %>" target="_blank" id="myURL">https://url-shortner-eta-black.vercel.app/url/<%= id %></a></p>
+                <button onclick="copyFunction('myURL')" class="submitbutton">Copy Short URL</button>
+                <button onclick="redirectToHome()" class="submitbutton">Home</button>
             </div>
             <% } %>
-                <form method="POST" action="/url">
-                    <label>Enter Your Original URL</label>
-                    <input type="text" name="url" placeholder="https://example.com" required />
-                    <button type="submit">Generate</button>
-                </form>
-                <% if (locals.urls) { %>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>S.No</th>
-                                <th>ShortID</th>
-                                <th>Redirect</th>
-                                <th>Clicks</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <% urls.forEach((url, index)=> { %>
-                                <tr>
-                                    <td>
-                                        <%= index + 1 %>
-                                    </td>
-                                    <td><a href="<%=" https://url-shortner-eta-black.vercel.app/url/"+url.shortId %>">
-                                            <%= "https://url-shortner-eta-black.vercel.app/url/" +url.shortId %>
-                                        </a></td>
-                                    <td><a href="<%= url.redirectURL %>" target="_blank">
-                                            <%= url.redirectURL %>
-                                        </a></td>
-                                    <td>
-                                        <%= url.visitHistory.length %>
-                                    </td>
-                                    <td>
-                                        <a href="/url/delete/<%= url.shortId%>"><i class="fas fa-trash-alt"></i></a>
-                                    </td>
-                                </tr>
-                                <% }) %>
-                        </tbody>
-                    </table>
-                    <% } %>
+            <form method="POST" action="/url">
+                <label>Enter Your Original URL</label>
+                <input type="text" name="url" placeholder="https://example.com" required />
+                <button type="submit" class="submitbutton">Generate</button>
+            </form>
+            <% if (locals.urls) { %>
+            <table>
+                <thead>
+                    <tr>
+                        <th>S.No</th>
+                        <th>ShortID</th>
+                        <th>Redirect</th>
+                        <th>Clicks</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% urls.forEach((url, index) => { %>
+                    <tr>
+                        <td><%= index + 1 %></td>
+                        <td><a href="https://url-shortner-eta-black.vercel.app/url/<%= url.shortId %>"><%= "https://url-shortner-eta-black.vercel.app/url/" + url.shortId %></a></td>
+                        <td><a href="<%= url.redirectURL %>" target="_blank"><%= url.redirectURL %></a></td>
+                        <td><%= url.visitHistory.length %></td>
+                        <td><a href="/url/delete/<%= url.shortId %>"><i class="fas fa-trash-alt"></i></a></td>
+                    </tr>
+                    <% }) %>
+                </tbody>
+            </table>
+            <% } %>
+        </div>
     </div>
     <script>
         function copyFunction(elm_id) {
             var text = document.getElementById(elm_id).innerHTML;
-
             navigator.clipboard.writeText(text);
             alert("Copied the text: " + text);
         }
+
         function redirectToHome() {
             window.location.href = '/'; // Redirect to home page
+        }
+
+        function redirectToQR() {
+            window.location.href = '/qrgenerate'; // Redirect to QR generator page
+        }
+
+        function redirectToImage() {
+            window.location.href = '/image';
         }
     </script>
 </body>

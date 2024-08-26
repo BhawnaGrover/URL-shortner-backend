@@ -1,12 +1,13 @@
 const shortid = require("shortid");
 const URL = require("../models/url");
+const USER = require("../models/user");
 const router = require("../routes/url");
 
 async function handleGenerateNewShortURL(req, res) {
   const body = req.body;
   if (!body.url) return res.status(400).json({ error: "url is required" });
   const shortID = shortid();
-
+  const user = await USER.findById(req.user._id);
   await URL.create({
     shortId: shortID,
     redirectURL: body.url,
@@ -14,7 +15,7 @@ async function handleGenerateNewShortURL(req, res) {
     createdBy: req.user._id,
   });
 
-  return res.render("home", { id: shortID });
+  return res.render("home", { id: shortID , username: user.name});
 }
 
 async function handleGetAnalytics(req, res) {
